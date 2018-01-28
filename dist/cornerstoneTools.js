@@ -1,4 +1,4 @@
-/*! cornerstone-tools - 2.0.0 - 2018-01-21 | (c) 2017 Chris Hafey | https://github.com/cornerstonejs/cornerstoneTools */
+/*! cornerstone-tools - 2.0.0 - 2018-01-27 | (c) 2017 Chris Hafey | https://github.com/cornerstonejs/cornerstoneTools */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -338,8 +338,22 @@ function setToolOptions(toolType, element, options) {
   }
 }
 
+function clearToolOptionsByToolType(toolType) {
+  delete elementToolOptions[toolType];
+}
+
+function clearToolOptionsByElement(element) {
+  for (var toolType in elementToolOptions) {
+    elementToolOptions[toolType] = elementToolOptions[toolType].filter(function (toolOptionObject) {
+      return toolOptionObject.element !== element;
+    });
+  }
+}
+
 exports.getToolOptions = getToolOptions;
 exports.setToolOptions = setToolOptions;
+exports.clearToolOptionsByToolType = clearToolOptionsByToolType;
+exports.clearToolOptionsByElement = clearToolOptionsByElement;
 
 /***/ }),
 /* 4 */
@@ -7165,6 +7179,10 @@ var _convertToVector = __webpack_require__(17);
 
 var _convertToVector2 = _interopRequireDefault(_convertToVector);
 
+var _toolOptions = __webpack_require__(3);
+
+var _toolOptions2 = _interopRequireDefault(_toolOptions);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function unique(array) {
@@ -7441,6 +7459,7 @@ function Synchronizer(event, handler) {
     var element = e.detail.element;
 
     that.remove(element);
+    (0, _toolOptions2.default)(element);
   }
 
   this.updateDisableHandlers = function () {
